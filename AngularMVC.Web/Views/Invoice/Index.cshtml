@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-app="app">
+    <div ng-controller="invoiceController">
+        <select kendo-drop-down-list ng-model="selected" id="mySel">
+            <option value="1">Thing 1</option>
+            <option value="2">Thing 2</option>
+            <option value="3">Thing 3</option>
+        </select>
+        {{selected}}
+        <div id="expense" kendo-grid k-options="expenseOptions"></div>
+        <div id="fee" kendo-grid k-options="feeOptions"></div>
+        SubTotal: {{total()}}<br/>
+        Discount: {{discount()}}<br/>
+        Total: {{total() - discount()}}<br/>
+    </div>
+</div>
+<script>
+    $(function() {
+        $("#someDiv").kendoGrid({
+            columns: ["item", "cost", "quantity", "amount"],
+            editable: true,
+            save: function (e) { //two way data binding 
+                var itemIndex = getItemIndex(getGrid("#expense"), e.model, expense);
+
+                $scope.$apply(function () {
+                    for (var p in e.values) {
+                        expense[itemIndex][p] = e.values[p];
+                    }
+                });
+            }
+        });
+    });
+</script>
